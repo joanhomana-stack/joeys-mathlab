@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#172554">
+  <title>Joey's MathLab | Multiplication & Division</title>
+  <style>
+    :root {
+      --navy:#172554; --blue:#2563eb; --sky:#eff6ff; --mint:#d1fae5;
+      --ink:#172033; --muted:#64748b; --paper:#f8fafc; --line:#dbe4f0;
+      --gold:#fbbf24; --white:#fff; --shadow:0 12px 32px rgba(23,37,84,.09);
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:var(--paper); }
+    header { background:linear-gradient(125deg,#172554,#1d4ed8); color:white; padding:28px 18px 34px; }
+    .head-inner, main { width:min(1100px, calc(100% - 32px)); margin:auto; }
+    .brand { display:flex; align-items:center; gap:13px; }
+    .logo { width:52px; height:52px; border-radius:16px; display:grid; place-items:center; background:#fff; color:#1d4ed8; font-size:27px; font-weight:900; box-shadow:0 5px 18px #0f172a44; }
+    h1 { margin:0; font-size:clamp(1.65rem,4vw,2.5rem); letter-spacing:-.04em; }
+    .tagline { margin:7px 0 0; color:#dbeafe; }
+    main { padding:24px 0 48px; }
+    .tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+    .tab { border:1px solid var(--line); background:white; color:var(--navy); border-radius:999px; padding:10px 17px; font-weight:750; cursor:pointer; }
+    .tab.active { background:var(--navy); border-color:var(--navy); color:white; }
+    .panel { background:white; border:1px solid var(--line); border-radius:20px; padding:clamp(16px,3vw,25px); box-shadow:var(--shadow); margin-bottom:18px; }
+    .panel h2 { margin:0 0 6px; color:var(--navy); font-size:1.35rem; }
+    .sub { color:var(--muted); margin:0 0 18px; }
+    .controls { display:flex; flex-wrap:wrap; align-items:end; gap:12px; }
+    label { display:grid; gap:6px; color:#334155; font-weight:700; font-size:.9rem; }
+    input, select { min-height:43px; border:1px solid #cbd5e1; border-radius:10px; padding:8px 11px; font:inherit; color:var(--ink); background:white; }
+    input:focus, select:focus, button:focus-visible { outline:3px solid #93c5fd; outline-offset:2px; }
+    button { font:inherit; }
+    .primary, .secondary { min-height:43px; border:0; border-radius:10px; padding:9px 16px; font-weight:800; cursor:pointer; }
+    .primary { background:var(--blue); color:white; }
+    .primary:hover { background:#1d4ed8; }
+    .secondary { background:var(--sky); color:#1e40af; border:1px solid #bfdbfe; }
+    .table-wrap { overflow:auto; border:1px solid var(--line); border-radius:13px; margin-top:18px; }
+    table { border-collapse:collapse; width:100%; min-width:440px; background:white; }
+    th,td { padding:11px 13px; text-align:center; border-bottom:1px solid var(--line); }
+    th { background:#eff6ff; color:#1e3a8a; position:sticky; top:0; }
+    tr:last-child td { border-bottom:0; }
+    tbody tr:nth-child(even) { background:#f8fafc; }
+    .answer { font-weight:800; color:#1d4ed8; }
+    .hidden-answer { color:#94a3b8; font-weight:600; }
+    .hint { margin-top:12px; padding:12px 14px; background:#fffbeb; border:1px solid #fde68a; border-radius:12px; color:#854d0e; }
+    .quiz-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+    .question-card { background:#f8fafc; border:1px solid var(--line); border-radius:15px; padding:18px; }
+    .question { font-size:1.65rem; font-weight:850; color:var(--navy); margin:4px 0 14px; }
+    .feedback { min-height:25px; margin-top:10px; font-weight:750; }
+    .good { color:#047857; } .try { color:#b45309; }
+    .score { font-weight:800; color:var(--navy); }
+    .hidden { display:none !important; }
+    footer { text-align:center; color:var(--muted); padding:0 16px 28px; font-size:.9rem; }
+    @media(max-width:560px) { .controls > * { flex:1 1 100%; } .controls button { width:100%; } .brand { align-items:flex-start; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="head-inner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">J÷×</div>
+      <div><h1>Joey's MathLab</h1><p class="tagline">Explore numbers. Practise smart. Grow your maths confidence.</p></div>
+    </div>
+  </div>
+</header>
+<main>
+  <nav class="tabs" aria-label="MathLab sections">
+    <button class="tab active" data-tab="learn">Learn tables</button>
+    <button class="tab" data-tab="practice">Practice quiz</button>
+    <button class="tab" data-tab="help">Maths tips</button>
+  </nav>
+
+  <section id="learn" class="panel">
+    <h2>Explore your tables</h2>
+    <p class="sub">Choose multiplication or division, then select a number from 0 to 100.</p>
+    <div class="controls">
+      <label>Operation
+        <select id="operation"><option value="multiply">Multiplication (×)</option><option value="divide">Division (÷)</option></select>
+      </label>
+      <label>Table number
+        <input id="tableNumber" type="number" min="0" max="100" value="7">
+      </label>
+      <label>How far?
+        <select id="limit"><option value="10">Up to 10</option><option value="12" selected>Up to 12</option><option value="20">Up to 20</option><option value="100">Up to 100</option></select>
+      </label>
+      <button class="primary" id="showTable">Show my table</button>
+      <button class="secondary" id="toggleAnswers">Hide answers</button>
+    </div>
+    <div id="tableMessage" class="hint" role="status">Choose a table and select “Show my table”.</div>
+    <div class="table-wrap"><table aria-label="Selected maths table"><thead><tr><th>Question</th><th>Answer</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+  </section>
+
+  <section id="practice" class="panel hidden">
+    <h2>Practice quiz</h2>
+    <p class="sub">Try a set of questions. Choose your operation and number range.</p>
+    <div class="controls" style="margin-bottom:18px">
+      <label>Operation
+        <select id="quizOperation"><option value="mixed">Mixed × and ÷</option><option value="multiply">Multiplication</option><option value="divide">Division</option></select>
+      </label>
+      <label>Numbers up to
+        <select id="quizRange"><option value="10">10</option><option value="20" selected>20</option><option value="50">50</option><option value="100">100</option></select>
+      </label>
+      <label>Questions
+        <select id="quizCount"><option>5</option><option selected>10</option><option>15</option></select>
+      </label>
+      <button class="primary" id="startQuiz">Start new quiz</button>
+    </div>
+    <div class="score" id="score" aria-live="polite">Your score: 0 / 0</div>
+    <div id="quizArea" class="quiz-grid" style="margin-top:12px"></div>
+  </section>
+
+  <section id="help" class="panel hidden">
+    <h2>Little tips that make a big difference</h2>
+    <ul>
+      <li><strong>Multiplication means equal groups.</strong> For example, 3 × 4 means 3 groups of 4.</li>
+      <li><strong>Division means sharing equally.</strong> For example, 12 ÷ 3 means sharing 12 into 3 equal groups.</li>
+      <li><strong>Use the reverse fact.</strong> If 6 × 4 = 24, then 24 ÷ 6 = 4 and 24 ÷ 4 = 6.</li>
+      <li><strong>Practise a little every day.</strong> Say the question, think of the answer, then check it.</li>
+      <li><strong>Remember zero.</strong> Any number multiplied by 0 equals 0. Division by 0 is not defined.</li>
+    </ul>
+    <div class="hint">Learning tip: Start with a small range, get confident, and then challenge yourself with bigger numbers.</div>
+  </section>
+</main>
+<footer>Joey's MathLab · A friendly place to practise multiplication and division</footer>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  let answersVisible = true;
+  let quizQuestions = [];
+  let quizScore = 0;
+  let answered = 0;
+
+  document.querySelectorAll('.tab').forEach(button => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === button));
+      ['learn','practice','help'].forEach(id => $(id).classList.toggle('hidden', id !== button.dataset.tab));
+    });
+  });
+
+  function showTable() {
+    const operation = $('operation').value;
+    const n = Number($('tableNumber').value);
+    const limit = Number($('limit').value);
+    if (!Number.isInteger(n) || n < 0 || n > 100) {
+      $('tableMessage').textContent = 'Please enter a whole number from 0 to 100.';
+      $('tableNumber').focus(); return;
+    }
+    const body = $('tableBody');
+    body.innerHTML = '';
+    for (let i = 0; i <= limit; i++) {
+      let question, answer;
+      if (operation === 'multiply') {
+        question = `${n} × ${i}`;
+        answer = n * i;
+      } else {
+        // Build division facts with whole-number answers: (n × i) ÷ n = i.
+        if (n === 0) {
+          question = '0 ÷ 0'; answer = null;
+        } else {
+          question = `${n * i} ÷ ${n}`;
+          answer = i;
+        }
+      }
+      const row = document.createElement('tr');
+      const q = document.createElement('td'); q.textContent = question;
+      const a = document.createElement('td'); a.textContent = answer === null ? 'Not defined' : answer;
+      a.className = answersVisible ? 'answer' : 'hidden-answer';
+      if (!answersVisible && answer !== null) a.textContent = '？';
+      row.append(q,a); body.append(row);
+    }
+    $('tableMessage').textContent = operation === 'divide'
+      ? (n === 0 ? 'Division by zero is not defined. Choose a number from 1 to 100 to practise division.' : `Division facts for ${n}. Each question has a whole-number answer.`)
+      : `The ${n} times table, from 0 to ${limit}.`;
+  }
+  $('showTable').addEventListener('click', showTable);
+  $('toggleAnswers').addEventListener('click', () => {
+    answersVisible = !answersVisible;
+    $('toggleAnswers').textContent = answersVisible ? 'Hide answers' : 'Show answers';
+    showTable();
+  });
+  $('tableNumber').addEventListener('keydown', e => { if (e.key === 'Enter') showTable(); });
+
+  function makeQuestion(operation, max) {
+    const a = Math.floor(Math.random() * (max + 1));
+    const b = Math.floor(Math.random() * (max + 1));
+    if (operation === 'multiply') return { text:`${a} × ${b}`, answer:a*b };
+    // Division questions are generated from a multiplication fact, avoiding remainders and division by zero.
+    const divisor = Math.max(1, Math.floor(Math.random() * max) + 1);
+    const quotient = Math.floor(Math.random() * (max + 1));
+    return { text:`${divisor * quotient} ÷ ${divisor}`, answer:quotient };
+  }
+  function startQuiz() {
+    const mode = $('quizOperation').value;
+    const max = Number($('quizRange').value);
+    const count = Number($('quizCount').value);
+    quizQuestions = Array.from({length:count}, () => {
+      const op = mode === 'mixed' ? (Math.random() < .5 ? 'multiply' : 'divide') : mode;
+      return {...makeQuestion(op,max), done:false};
+    });
+    quizScore = 0; answered = 0;
+    $('score').textContent = `Your score: 0 / ${count}`;
+    const area = $('quizArea'); area.innerHTML = '';
+    quizQuestions.forEach((item,index) => {
+      const card = document.createElement('div'); card.className = 'question-card';
+      const title = document.createElement('div'); title.textContent = `Question ${index+1}`;
+      const question = document.createElement('div'); question.className = 'question'; question.textContent = item.text;
+      const input = document.createElement('input'); input.type = 'number'; input.step = '1'; input.placeholder = 'Your answer'; input.setAttribute('aria-label',`Answer for question ${index+1}`);
+      const button = document.createElement('button'); button.className = 'primary'; button.textContent = 'Check answer'; button.style.marginTop = '9px';
+      const feedback = document.createElement('div'); feedback.className = 'feedback'; feedback.setAttribute('aria-live','polite');
+      button.addEventListener('click', () => {
+        if (item.done) return;
+        if (input.value.trim() === '' || !Number.isFinite(Number(input.value))) {
+          feedback.textContent = 'Enter an answer first.'; feedback.className = 'feedback try'; return;
+        }
+        item.done = true; answered++;
+        if (Number(input.value) === item.answer) {
+          quizScore++; feedback.textContent = 'Correct! Great work.'; feedback.className = 'feedback good';
+        } else {
+          feedback.textContent = `Good try! The answer is ${item.answer}.`; feedback.className = 'feedback try';
+        }
+        input.disabled = true; button.disabled = true; button.textContent = 'Answered';
+        $('score').textContent = `Your score: ${quizScore} / ${count} · Completed: ${answered} / ${count}`;
+        if (answered === count) $('score').textContent += quizScore === count ? ' — Perfect score!' : ' — Well done for practising!';
+      });
+      input.addEventListener('keydown',e => { if(e.key === 'Enter') button.click(); });
+      card.append(title,question,input,button,feedback); area.append(card);
+    });
+  }
+  $('startQuiz').addEventListener('click', startQuiz);
+  showTable();
+  startQuiz();
+</script>
+</body>
+</html>
